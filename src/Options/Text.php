@@ -15,6 +15,13 @@ class Text
     {
         $this->section = $section;
         $this->args = $args;
+
+        add_filter('wp_settings_new_options_option_1', [$this, 'sanitize'], 10, 2);
+    }
+
+    public function sanitize($value, $option)
+    {
+        return sanitize_text_field($value);
     }
 
     public function get_name_attribute()

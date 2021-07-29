@@ -130,6 +130,20 @@ class WPSettings
         return get_option($this->option_name, []);
     }
 
+    public function find_option($search_option)
+    {
+        foreach($this->tabs as $tab) {
+            foreach ( $tab->sections as $section ) {
+                foreach ( $section->options as $option ) {
+                    if ( $option->args['name'] == $search_option ) {
+                        return $option;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
     public function save()
     {
         if (! isset($_POST['wp_settings_trigger'])) {
@@ -145,15 +159,18 @@ class WPSettings
         }
 
         $current_options = $this->get_options();
+        $new_options = $_POST[$this->option_name] ?? [];
+
+        $new_options = apply_filters('wp_settings_new_options', $new_options, $current_options);
 
         foreach ($_POST[$this->option_name] as $option => $value) {
-            $current_options[$option] = $value;
+            $current_options[$option] = apply_filters("wp_settings_new_options_$option", $value, $this->find_option($option));
         }
 
         update_option($this->option_name, $current_options);
 
         global $wp_settings_flash;
 
-        $wp_settings_flash = ['status' => 'success', 'message' => __('OK!')];
+        $wp_settings_flash = ['status' => 'success', 'message' => __('Saved changes!')];
     }
 }
