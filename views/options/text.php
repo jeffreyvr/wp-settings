@@ -1,0 +1,1 @@
+<input type="text" name="<?php echo esc_attr($option->get_name_attribute()); ?>" value="<?php echo $option->get_value_attribute(); ?>" />

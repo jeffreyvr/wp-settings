@@ -1,0 +1,20 @@
+{
+    "name": "jeffreyvanrossum/wp-settings",
+    "description": "Handy wrapper to make creating WordPress settings pages a breeze.",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jeffrey van Rossum",
+            "email": "jeffrey@vanrossum.dev"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Jeffreyvr\\WPSettings\\": "src"
+        },
+        "files": [
+            "src/helpers.php"
+        ]
+    }
+}
