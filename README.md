@@ -1,6 +1,8 @@
-*WORK IN PROGRESS*
+<p align="center"><img src="/art/snippet.png" alt="Code Snippet" style="width:70%;"></p>
 
 # WP Settings
+
+*WORK IN PROGRESS*
 
 A package that makes creating WordPress settings pages a breeze.
 
@@ -89,13 +91,13 @@ You are able to validate an option. You may pass a callback and a feedback messa
 
 ```php
 $section->add_option('text', [
-    'name' => 'option_1',
-    'label' => __('Option 1', 'textdomain'),
+    'name' => 'mailchimp_api_key',
+    'label' => __('API Key', 'textdomain'),
     'validate' => [
         [
-            'feedback' => __('Must contain at least one character', 'textdomain'),
+            'feedback' => __('Your API key is too short.', 'textdomain'),
             'callback' => function($value) {
-                return strlen($value) > 0;
+                return strlen($value) > 35;
             }
         ]
     ]
@@ -107,11 +109,18 @@ $section->add_option('text', [
 You may pass a sanitization callback.
 
 ```php
-$section->add_option( 'text', [
-    'name' => 'option_1',
-    'label' => __('Option 1', 'textdomain'),
-    'sanitize' => function($value) {
-        return sanitize_title($value);
+$section->add_option('text', [
+    'name' => 'mailchimp_api_key',
+    'label' => __('API Key', 'textdomain'),
+    'santitize' => function($value) {
+        return sanitize_key($value);
     }
-] );
+]);
 ```
+
+## Contributors
+* [Jeffrey van Rossum](https://github.com/jeffreyvr)
+* [All contributors](https://github.com/jeffreyvr/tailpress/graphs/contributors)
+
+## License
+MIT. Please see the [License File](/LICENSE) for more information.

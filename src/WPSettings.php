@@ -9,7 +9,7 @@ class WPSettings
     public $title;
     public $slug;
     public $parent_slug;
-    public $capability;
+    public $capability = 'manage_options';
     public $menu_icon;
     public $menu_position;
     public $option_name;
@@ -19,6 +19,7 @@ class WPSettings
     public function __construct($title, $slug = null)
     {
         $this->title = $title;
+        $this->option_name = strtolower(str_replace('-', '_', sanitize_title($this->title)));
         $this->errors = new \WP_Error;
 
         if ($this->slug === null) {
@@ -233,7 +234,7 @@ class WPSettings
     {
         $errors = $this->get_errors();
 
-        if( !is_wp_error($errors)) {
+        if (!is_wp_error($errors)) {
             return;
         }
 
