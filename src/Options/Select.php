@@ -11,9 +11,4 @@ class Select extends OptionAbstract
     {
         return view('options/select', ['option' => $this]);
     }
-
-    public function sanitize($value)
-    {
-        return sanitize_text_field($value);
-    }
 }

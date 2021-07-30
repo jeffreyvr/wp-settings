@@ -8,5 +8,8 @@
                 <option value="<?php echo $key; ?>" <?php selected($option->get_value_attribute(), $key); ?>><?php echo $label; ?></option>
             <?php } ?>
         </select>
+        <?php if($description = $option->get_arg('description')) { ?>
+        <p class="description"><?php echo $description; ?></p>
+        <?php } ?>
     </td>
 </tr>

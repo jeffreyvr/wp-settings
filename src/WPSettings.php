@@ -14,10 +14,12 @@ class WPSettings
     public $menu_position;
     public $option_name;
     public $tabs = [];
+    public $errors;
 
     public function __construct($title, $slug = null)
     {
         $this->title = $title;
+        $this->errors = new \WP_Error;
 
         if ($this->slug === null) {
             $this->slug = sanitize_title($title);
@@ -124,15 +126,15 @@ class WPSettings
     {
         $params = [];
 
-        if ( $active_tab = $this->get_active_tab() ) {
+        if ($active_tab = $this->get_active_tab()) {
             $params['tab'] = $active_tab->slug;
 
-            if($active_section = $active_tab->get_active_section()) {
+            if ($active_section = $active_tab->get_active_section()) {
                 $params['section'] = $active_section->slug;
             }
         }
 
-        return add_query_arg($params, $this->get_url() );
+        return add_query_arg($params, $this->get_url());
     }
 
     public function render_tab_menu()
@@ -151,9 +153,7 @@ class WPSettings
 
     public function render()
     {
-        global $wp_settings_flash;
-
-        view('settings-page', ['settings' => $this, 'flash' => $wp_settings_flash]);
+        view('settings-page', ['settings' => $this]);
     }
 
     public function get_options()
@@ -196,6 +196,13 @@ class WPSettings
 
         foreach ($_POST[$this->option_name] as $option => $value) {
             $_option = $this->find_option($option);
+
+            $valid = $_option->validate($value);
+
+            if (!$valid) {
+                continue;
+            }
+
             $value = $_option->sanitize($value);
 
             $current_options[$option] = apply_filters("wp_settings_new_options_$option", $value, $_option);
@@ -203,8 +210,42 @@ class WPSettings
 
         update_option($this->option_name, $current_options);
 
-        global $wp_settings_flash;
+        global $wp_settings;
 
-        $wp_settings_flash = ['status' => 'success', 'message' => __('Saved changes!')];
+        $wp_settings[$this->option_name]['flash'] = ['status' => 'success', 'message' => __('Saved changes!')];
+    }
+
+    public function get_flash()
+    {
+        global $wp_settings;
+
+        return $wp_settings[$this->option_name]['flash'] ?? null;
+    }
+
+    public function get_errors()
+    {
+        global $wp_settings;
+
+        return $wp_settings[$this->option_name]['errors'];
+    }
+
+    public function get_error($key)
+    {
+        $errors = $this->get_errors();
+
+        if( !is_wp_error($errors)) {
+            return;
+        }
+
+        return $errors->get_error_message($key);
+    }
+
+    public function add_error($key, $message)
+    {
+        global $wp_settings;
+
+        $this->errors->add($key, $message);
+
+        $wp_settings[$this->option_name]['errors'] = $this->errors;
     }
 }

@@ -34,6 +34,11 @@ class Option
         return $this->implementation->sanitize($value);
     }
 
+    public function validate($value)
+    {
+        return $this->implementation->validate($value);
+    }
+
     public function render()
     {
         echo $this->implementation->render();

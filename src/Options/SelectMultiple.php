@@ -18,9 +18,4 @@ class SelectMultiple extends OptionAbstract
 
         return "{$name}[]";
     }
-
-    public function sanitize($value)
-    {
-        return (array) $value;
-    }
 }

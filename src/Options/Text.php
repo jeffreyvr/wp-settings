@@ -11,9 +11,4 @@ class Text extends OptionAbstract
     {
         return view('options/text', ['option' => $this]);
     }
-
-    public function sanitize($value)
-    {
-        return sanitize_text_field($value);
-    }
 }
