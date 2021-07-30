@@ -17,6 +17,10 @@ if (! function_exists('view')) {
             return;
         }
 
+        ob_start();
+
         include __DIR__ . "/../views/{$file}.php";
+
+        echo apply_filters('wp_settings_render_view', ob_get_clean(), $file, $variables);
     }
 }

@@ -5,6 +5,7 @@ namespace Jeffreyvr\WPSettings;
 use Jeffreyvr\WPSettings\Section;
 use Jeffreyvr\WPSettings\Options\Text;
 use Jeffreyvr\WPSettings\Options\Select;
+use Jeffreyvr\WPSettings\Options\SelectMultiple;
 
 class Option
 {
@@ -19,11 +20,18 @@ class Option
         $this->type = $type;
         $this->args = $args;
 
-        if ($this->type === 'text') {
-            $this->implementation = new Text($this->section, $args);
-        } elseif ($this->type === 'select') {
-            $this->implementation = new Select($this->section, $args);
-        }
+        $type_map = apply_filters('wp_settings_option_type_map', [
+            'text' => new Text($this->section, $args),
+            'select' => new Select($this->section, $args),
+            'select-multiple' => new SelectMultiple($this->section, $args)
+        ]);
+
+        $this->implementation = $type_map[$this->type];
+    }
+
+    public function sanitize($value)
+    {
+        return $this->implementation->sanitize($value);
     }
 
     public function render()

@@ -8,6 +8,7 @@ class WPSettings
 {
     public $title;
     public $slug;
+    public $parent_slug;
     public $capability;
     public $menu_icon;
     public $menu_position;
@@ -21,6 +22,13 @@ class WPSettings
         if ($this->slug === null) {
             $this->slug = sanitize_title($title);
         }
+    }
+
+    public function set_menu_parent_slug($slug)
+    {
+        $this->parent_slug = $slug;
+
+        return $this;
     }
 
     public function set_capability($capability)
@@ -53,7 +61,11 @@ class WPSettings
 
     public function add_to_menu()
     {
-        \add_menu_page($this->title, $this->title, $this->capability, $this->slug, [$this, 'render'], $this->menu_icon, $this->menu_position);
+        if ($this->parent_slug) {
+            \add_submenu_page($this->parent_slug, $this->title, $this->title, $this->capability, $this->slug, [$this, 'render'], $this->menu_position);
+        } else {
+            \add_menu_page($this->title, $this->title, $this->capability, $this->slug, [$this, 'render'], $this->menu_icon, $this->menu_position);
+        }
     }
 
     public function make()
@@ -101,7 +113,26 @@ class WPSettings
 
     public function get_url()
     {
+        if ($this->parent_slug) {
+            return \admin_url($this->parent_slug . "?page=$this->slug");
+        }
+
         return \admin_url("admin.php?page=$this->slug");
+    }
+
+    public function get_full_url()
+    {
+        $params = [];
+
+        if ( $active_tab = $this->get_active_tab() ) {
+            $params['tab'] = $active_tab->slug;
+
+            if($active_section = $active_tab->get_active_section()) {
+                $params['section'] = $active_section->slug;
+            }
+        }
+
+        return add_query_arg($params, $this->get_url() );
     }
 
     public function render_tab_menu()
@@ -132,10 +163,10 @@ class WPSettings
 
     public function find_option($search_option)
     {
-        foreach($this->tabs as $tab) {
-            foreach ( $tab->sections as $section ) {
-                foreach ( $section->options as $option ) {
-                    if ( $option->args['name'] == $search_option ) {
+        foreach ($this->tabs as $tab) {
+            foreach ($tab->sections as $section) {
+                foreach ($section->options as $option) {
+                    if ($option->args['name'] == $search_option) {
                         return $option;
                     }
                 }
@@ -164,7 +195,10 @@ class WPSettings
         $new_options = apply_filters('wp_settings_new_options', $new_options, $current_options);
 
         foreach ($_POST[$this->option_name] as $option => $value) {
-            $current_options[$option] = apply_filters("wp_settings_new_options_$option", $value, $this->find_option($option));
+            $_option = $this->find_option($option);
+            $value = $_option->sanitize($value);
+
+            $current_options[$option] = apply_filters("wp_settings_new_options_$option", $value, $_option);
         }
 
         update_option($this->option_name, $current_options);
