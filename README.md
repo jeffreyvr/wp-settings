@@ -4,7 +4,7 @@
 
 *THIS PACKAGE IS WORK IN PROGRESS*
 
-A package that makes creating WordPress settings pages a breeze.
+This package aims to make it easier to create settings pages for WordPress plugins. Typically, you would use the [Settings API](https://developer.wordpress.org/plugins/settings/settings-api/) or write something custom. While the Settings API works, there is still quite a lot to set up. You still need to write the HTML for your options for example. And it gets quite complicated if you want to add tabs and tab-sections. See this [comparison](#comparison).
 
 ## Installation
 
@@ -146,3 +146,128 @@ $section->add_option('text', [
 
 ## License
 MIT. Please see the [License File](/LICENSE) for more information.
+
+## Comparison with the Settings API
+
+The below example is a options page made with WordPress Settings API. This example is taken from the [WordPress documentation](https://developer.wordpress.org/plugins/settings/custom-settings-page/). I removed the comments to allow for a fair comparison.
+
+```php
+<?php
+function wporg_settings_init() {
+    register_setting( 'wporg', 'wporg_options' );
+
+    add_settings_section(
+        'wporg_section_developers',
+        __( 'The Matrix has you.', 'wporg' ), 'wporg_section_developers_callback',
+        'wporg'
+    );
+
+    add_settings_field(
+        'wporg_field_pill',
+        __( 'Pill', 'wporg' ),
+        'wporg_field_pill_cb',
+        'wporg',
+        'wporg_section_developers',
+        array(
+            'label_for'         => 'wporg_field_pill',
+            'class'             => 'wporg_row',
+            'wporg_custom_data' => 'custom',
+        )
+    );
+}
+
+add_action( 'admin_init', 'wporg_settings_init' );
+
+function wporg_section_developers_callback( $args ) {
+    ?>
+    <p id="<?php echo esc_attr( $args['id'] ); ?>"><?php esc_html_e( 'Follow the white rabbit.', 'wporg' ); ?></p>
+    <?php
+}
+
+function wporg_field_pill_cb( $args ) {
+    $options = get_option( 'wporg_options' );
+    ?>
+    <select
+            id="<?php echo esc_attr( $args['label_for'] ); ?>"
+            data-custom="<?php echo esc_attr( $args['wporg_custom_data'] ); ?>"
+            name="wporg_options[<?php echo esc_attr( $args['label_for'] ); ?>]">
+        <option value="red" <?php echo isset( $options[ $args['label_for'] ] ) ? ( selected( $options[ $args['label_for'] ], 'red', false ) ) : ( '' ); ?>>
+            <?php esc_html_e( 'red pill', 'wporg' ); ?>
+        </option>
+        <option value="blue" <?php echo isset( $options[ $args['label_for'] ] ) ? ( selected( $options[ $args['label_for'] ], 'blue', false ) ) : ( '' ); ?>>
+            <?php esc_html_e( 'blue pill', 'wporg' ); ?>
+        </option>
+    </select>
+    <p class="description">
+        <?php esc_html_e( 'You take the blue pill and the story ends. You wake in your bed and you believe whatever you want to believe.', 'wporg' ); ?>
+    </p>
+    <p class="description">
+        <?php esc_html_e( 'You take the red pill and you stay in Wonderland and I show you how deep the rabbit-hole goes.', 'wporg' ); ?>
+    </p>
+    <?php
+}
+
+function wporg_options_page() {
+    add_menu_page(
+        'WPOrg',
+        'WPOrg Options',
+        'manage_options',
+        'wporg',
+        'wporg_options_page_html'
+    );
+}
+
+add_action( 'admin_menu', 'wporg_options_page' );
+
+function wporg_options_page_html() {
+    if ( ! current_user_can( 'manage_options' ) ) {
+        return;
+    }
+
+    if ( isset( $_GET['settings-updated'] ) ) {
+        add_settings_error( 'wporg_messages', 'wporg_message', __( 'Settings Saved', 'wporg' ), 'updated' );
+    }
+
+    settings_errors( 'wporg_messages' );
+    ?>
+    <div class="wrap">
+        <h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
+        <form action="options.php" method="post">
+            <?php
+            settings_fields( 'wporg' );
+
+            do_settings_sections( 'wporg' );
+
+            submit_button( 'Save Settings' );
+            ?>
+        </form>
+    </div>
+    <?php
+}
+```
+
+Now with the next example, the exact options page will be replicated with this package.
+
+```php
+use Jeffreyvr\WPSettings\WPSettings;
+
+$settings = new WPSettings(__('WPOrg Second', 'textdomain'));
+
+$tab = $settings->add_tab(__('General', 'textdomain'));
+
+$section = $tab->add_section(__('The Matrix has you.', 'wporg'), ['description' => esc_html__('Follow the white rabbit.', 'wporg')]);
+
+$section->add_option('select', [
+        'name' => 'wporg_field_pill',
+        'label' => __('Pill', 'textdomain'),
+        'description' => 'You take the blue pill and the story ends. You wake in your bed and you believe whatever you want to believe.
+        <br>You take the red pill and you stay in Wonderland and I show you how deep the rabbit-hole goes.',
+        'options' => [
+            'blue' => esc_html__('red pill', 'wporg'),
+            'red' => esc_html__('blue pill', 'wporg')
+        ]
+    ]
+);
+
+$settings->make();
+```

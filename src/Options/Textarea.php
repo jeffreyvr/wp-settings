@@ -7,8 +7,5 @@ use Jeffreyvr\WPSettings\Options\OptionAbstract;
 
 class Textarea extends OptionAbstract
 {
-    public function render()
-    {
-        return view('options/textarea', ['option' => $this]);
-    }
+    public $view = 'textarea';
 }

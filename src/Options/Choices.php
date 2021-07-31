@@ -7,8 +7,5 @@ use Jeffreyvr\WPSettings\Options\OptionAbstract;
 
 class Choices extends OptionAbstract
 {
-    public function render()
-    {
-        return view('options/choices', ['option' => $this]);
-    }
+    public $view = 'choices';
 }

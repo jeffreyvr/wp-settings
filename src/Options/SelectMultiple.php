@@ -7,10 +7,7 @@ use Jeffreyvr\WPSettings\Options\OptionAbstract;
 
 class SelectMultiple extends OptionAbstract
 {
-    public function render()
-    {
-        return view('options/select-multiple', ['option' => $this]);
-    }
+    public $view = 'select-multiple';
 
     public function get_name_attribute()
     {

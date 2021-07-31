@@ -4,16 +4,23 @@ namespace Jeffreyvr\WPSettings\Options;
 
 use Jeffreyvr\WPSettings\Section;
 use Jeffreyvr\WPSettings\WPSettings;
+use function Jeffreyvr\WPSettings\view as view;
 
 abstract class OptionAbstract
 {
     public Section $section;
     public $args = [];
+    public $view;
 
     public function __construct($section, $args = [])
     {
         $this->section = $section;
         $this->args = $args;
+    }
+
+    public function render()
+    {
+        return view('options/' . $this->view, ['option' => $this]);
     }
 
     public function has_error()
@@ -89,10 +96,5 @@ abstract class OptionAbstract
     public function get_value_attribute()
     {
         return get_option($this->section->tab->settings->option_name)[$this->get_arg('name')] ?? null;
-    }
-
-    public function render()
-    {
-        return;
     }
 }
