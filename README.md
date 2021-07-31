@@ -149,7 +149,7 @@ MIT. Please see the [License File](/LICENSE) for more information.
 
 ## Comparison with the Settings API
 
-The below example is a options page made with WordPress Settings API. This example is taken from the [WordPress documentation](https://developer.wordpress.org/plugins/settings/custom-settings-page/). I removed the comments to allow for a fair comparison.
+The below example is an options page made with WordPress Settings API. This example is taken from the [WordPress documentation](https://developer.wordpress.org/plugins/settings/custom-settings-page/). I removed the comments to allow for a fair comparison.
 
 ```php
 <?php

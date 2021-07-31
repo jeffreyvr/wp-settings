@@ -16,11 +16,5 @@
         "files": [
             "src/helpers.php"
         ]
-    },
-    "scripts": {
-        "copy-assets": [
-            "php -r \"copy('assets/wp-settings.css', '../../assets/wp-settings/wp-settings.css');\"",
-            "php -r \"copy('assets/wp-settings.js', '../../assets/wp-settings/wp-settings.js');\""
-        ]
     }
 }
