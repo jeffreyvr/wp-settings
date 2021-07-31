@@ -1,8 +1,8 @@
-<p align="center"><img src="/art/snippet.png" alt="Code Snippet" style="width:70%;"></p>
+<p align="center"><img src="/art/snippet.png" alt="Code Snippet" style="width:60%;"></p>
 
 # WP Settings
 
-*WORK IN PROGRESS*
+*THIS PACKAGE IS WORK IN PROGRESS*
 
 A package that makes creating WordPress settings pages a breeze.
 
@@ -14,19 +14,27 @@ composer require jeffreyvanrossum/wp-settings
 
 ## Usage
 
-### Creating the settings instance
+### Basic example
 
 ```php
 $settings = new WPSettings(__('My Plugin Settings'), 'my-plugin-settings');
 
-$settings->set_capability('manage_options');
-$settings->set_option_name('my_plugin_options');
+$tab = $settings->add_tab(__( 'General', 'textdomain'));
 
-$settings->set_menu_icon('dashicons-admin-generic');
-$settings->set_menu_position(5);
+$section = $tab->add_section('MailChimp');
 
-// Use the below method to make your settings page a submenu item.
-$settings->set_menu_parent_slug('options-general.php');
+$section->add_option('text', [
+    'name' => 'mailchimp_api_key',
+    'label' => __('API Key', 'textdomain')
+]);
+
+$settings->make();
+```
+
+### Creating the settings instance
+
+```php
+$settings = new WPSettings(__('My Plugin Settings'), 'my-plugin-settings');
 ```
 
 ### Adding tabs and sections
@@ -52,11 +60,11 @@ You may add options to sections.
 #### Regular text field
 
 ```php
-$section->add_option( 'text', [
+$section->add_option('text', [
     'name' => 'option_1',
     'label' => __('Option 1', 'textdomain'),
     'placeholder' => __('Fill in something', 'textdomain')
-] );
+]);
 ```
 
 #### Select field
@@ -83,6 +91,20 @@ $section->add_option('select-multiple', [
         'value_2' => 'Label 2'
     ]
 ] );
+```
+
+### Optionals
+
+```php
+$settings->set_capability('manage_options');
+
+$settings->set_option_name('my_plugin_options');
+
+$settings->set_menu_icon('dashicons-admin-generic');
+
+$settings->set_menu_position(5);
+
+$settings->set_menu_parent_slug('options-general.php');
 ```
 
 ### Validation
