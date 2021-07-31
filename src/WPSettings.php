@@ -3,6 +3,8 @@
 namespace Jeffreyvr\WPSettings;
 
 use Jeffreyvr\WPSettings\Tab;
+use Jeffreyvr\WPSettings\Error;
+use Jeffreyvr\WPSettings\Flash;
 
 class WPSettings
 {
@@ -15,12 +17,12 @@ class WPSettings
     public $option_name;
     public $tabs = [];
     public $errors;
+    public $flash;
 
     public function __construct($title, $slug = null)
     {
         $this->title = $title;
         $this->option_name = strtolower(str_replace('-', '_', sanitize_title($this->title)));
-        $this->errors = new \WP_Error;
 
         if ($this->slug === null) {
             $this->slug = sanitize_title($title);
@@ -73,8 +75,38 @@ class WPSettings
 
     public function make()
     {
+        $this->errors = new Error($this);
+        $this->flash = new Flash($this);
+
         add_action('admin_init', [$this, 'save']);
         add_action('admin_menu', [$this, 'add_to_menu']);
+        add_action('admin_head', [$this, 'styling']);
+    }
+
+    public function is_on_settings_page()
+    {
+        $screen = get_current_screen();
+
+        if ( $screen->base === 'settings_page_' . $this->slug ) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function styling()
+    {
+        if ( ! $this->is_on_settings_page() ) {
+            return;
+        }
+        ?>
+        <style>
+            .wps-error-feedback {
+                color: #d63638;
+                margin: 5px 0;
+            }
+        </style>
+        <?php
     }
 
     public function get_tab_by_slug($slug)
@@ -186,16 +218,14 @@ class WPSettings
             wp_die(__('What do you think you are doing?'));
         }
 
-        if (! isset($_POST[$this->option_name])) {
+        if (! isset($_POST[$this->option_name]) && !isset($_POST['wp_settings_submitted'])) {
             return;
         }
 
         $current_options = $this->get_options();
-        $new_options = $_POST[$this->option_name] ?? [];
+        $new_options = apply_filters('wp_settings_new_options', $_POST[$this->option_name] ?? [], $current_options);
 
-        $new_options = apply_filters('wp_settings_new_options', $new_options, $current_options);
-
-        foreach ($_POST[$this->option_name] as $option => $value) {
+        foreach ($new_options as $option => $value) {
             $_option = $this->find_option($option);
 
             $valid = $_option->validate($value);
@@ -204,49 +234,28 @@ class WPSettings
                 continue;
             }
 
-            $value = $_option->sanitize($value);
-
-            $current_options[$option] = apply_filters("wp_settings_new_options_$option", $value, $_option);
+            $current_options[$option] = apply_filters("wp_settings_new_options_$option", $_option->sanitize($value), $_option);
         }
+
+        $current_options = $this->maybe_unset_options($current_options, $new_options);
 
         update_option($this->option_name, $current_options);
 
-        global $wp_settings;
-
-        $wp_settings[$this->option_name]['flash'] = ['status' => 'success', 'message' => __('Saved changes!')];
+        $this->flash->set('success', __('Saved changes!'));
     }
 
-    public function get_flash()
+    public function maybe_unset_options($current_options, $new_options)
     {
-        global $wp_settings;
-
-        return $wp_settings[$this->option_name]['flash'] ?? null;
-    }
-
-    public function get_errors()
-    {
-        global $wp_settings;
-
-        return $wp_settings[$this->option_name]['errors'];
-    }
-
-    public function get_error($key)
-    {
-        $errors = $this->get_errors();
-
-        if (!is_wp_error($errors)) {
-            return;
+        if ( ! isset( $_REQUEST['wp_settings_submitted']) ) {
+            return $current_options;
         }
 
-        return $errors->get_error_message($key);
-    }
+        foreach ($_REQUEST['wp_settings_submitted'] as $submitted) {
+            if ( empty($new_options[$submitted])) {
+                unset($current_options[$submitted]);
+            }
+        }
 
-    public function add_error($key, $message)
-    {
-        global $wp_settings;
-
-        $this->errors->add($key, $message);
-
-        $wp_settings[$this->option_name]['errors'] = $this->errors;
+        return $current_options;
     }
 }

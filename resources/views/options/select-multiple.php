@@ -9,7 +9,11 @@
             <?php } ?>
         </select>
         <?php if($description = $option->get_arg('description')) { ?>
-        <p class="description"><?php echo $description; ?></p>
+            <p class="description"><?php echo $description; ?></p>
+        <?php } ?>
+
+        <?php if($error = $option->has_error()) { ?>
+            <div class="wps-error-feedback"><?php echo $error; ?></div>
         <?php } ?>
     </td>
 </tr>

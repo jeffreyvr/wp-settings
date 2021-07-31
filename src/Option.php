@@ -5,6 +5,9 @@ namespace Jeffreyvr\WPSettings;
 use Jeffreyvr\WPSettings\Section;
 use Jeffreyvr\WPSettings\Options\Text;
 use Jeffreyvr\WPSettings\Options\Select;
+use Jeffreyvr\WPSettings\Options\Choices;
+use Jeffreyvr\WPSettings\Options\Checkbox;
+use Jeffreyvr\WPSettings\Options\Textarea;
 use Jeffreyvr\WPSettings\Options\SelectMultiple;
 
 class Option
@@ -22,6 +25,9 @@ class Option
 
         $type_map = apply_filters('wp_settings_option_type_map', [
             'text' => new Text($this->section, $args),
+            'checkbox' => new Checkbox($this->section, $args),
+            'choices' => new Choices($this->section, $args),
+            'textarea' => new Textarea($this->section, $args),
             'select' => new Select($this->section, $args),
             'select-multiple' => new SelectMultiple($this->section, $args)
         ]);

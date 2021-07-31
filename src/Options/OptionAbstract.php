@@ -16,6 +16,11 @@ abstract class OptionAbstract
         $this->args = $args;
     }
 
+    public function has_error()
+    {
+        return $this->section->tab->settings->errors->get($this->get_arg('name'));
+    }
+
     public function sanitize($value)
     {
         if (\is_callable($this->get_arg('sanitize'))) {
@@ -23,11 +28,6 @@ abstract class OptionAbstract
         }
 
         return $value;
-    }
-
-    public function has_error()
-    {
-        return $this->section->tab->settings->get_error($this->get_arg('name'));
     }
 
     public function validate($value)
@@ -45,7 +45,7 @@ abstract class OptionAbstract
                 $valid = $validate['callback']($value);
 
                 if (!$valid) {
-                    $this->section->tab->settings->add_error($this->get_arg('name'), $validate['feedback']);
+                    $this->section->tab->settings->errors->add($this->get_arg('name'), $validate['feedback']);
 
                     return false;
                 }
@@ -73,7 +73,12 @@ abstract class OptionAbstract
 
     public function get_id_attribute()
     {
-        return $this->get_arg('id');
+        return $this->get_arg('id', sanitize_title($this->get_name_attribute()));
+    }
+
+    public function get_name()
+    {
+        return $this->get_arg('name');
     }
 
     public function get_name_attribute()
