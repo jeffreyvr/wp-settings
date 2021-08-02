@@ -87,7 +87,7 @@ class WPSettings
     {
         $screen = get_current_screen();
 
-        if ( $screen->base === 'settings_page_' . $this->slug ) {
+        if ($screen->base === 'settings_page_' . $this->slug) {
             return true;
         }
 
@@ -96,7 +96,7 @@ class WPSettings
 
     public function styling()
     {
-        if ( ! $this->is_on_settings_page() ) {
+        if (! $this->is_on_settings_page()) {
             return;
         }
         ?>
@@ -139,6 +139,34 @@ class WPSettings
         $this->tabs[] = $tab;
 
         return $tab;
+    }
+
+    public function add_section($title, $args = [])
+    {
+        if (empty($this->tabs)) {
+            $tab = $this->add_tab('Unnamed tab');
+        } else {
+            $tab = end($this->tabs);
+        }
+
+        return $tab->add_section($title, $args);
+    }
+
+    public function add_option($type, $args = [])
+    {
+        $tab = end($this->tabs);
+
+        if (! $tab instanceof Tab) {
+            return false;
+        }
+
+        $section = end($tab->sections);
+
+        if (! $section instanceof Section) {
+            return false;
+        }
+
+        return $section->add_option($type, $args);
     }
 
     public function should_make_tabs()
@@ -246,12 +274,12 @@ class WPSettings
 
     public function maybe_unset_options($current_options, $new_options)
     {
-        if ( ! isset( $_REQUEST['wp_settings_submitted']) ) {
+        if (! isset($_REQUEST['wp_settings_submitted'])) {
             return $current_options;
         }
 
         foreach ($_REQUEST['wp_settings_submitted'] as $submitted) {
-            if ( empty($new_options[$submitted])) {
+            if (empty($new_options[$submitted])) {
                 unset($current_options[$submitted]);
             }
         }
