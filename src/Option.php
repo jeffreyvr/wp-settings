@@ -8,6 +8,8 @@ use Jeffreyvr\WPSettings\Options\Select;
 use Jeffreyvr\WPSettings\Options\Choices;
 use Jeffreyvr\WPSettings\Options\Checkbox;
 use Jeffreyvr\WPSettings\Options\Textarea;
+use Jeffreyvr\WPSettings\Options\WPEditor;
+use Jeffreyvr\WPSettings\Options\CodeEditor;
 use Jeffreyvr\WPSettings\Options\SelectMultiple;
 
 class Option
@@ -24,19 +26,30 @@ class Option
         $this->args = $args;
 
         $type_map = apply_filters('wp_settings_option_type_map', [
-            'text' => new Text($this->section, $args),
-            'checkbox' => new Checkbox($this->section, $args),
-            'choices' => new Choices($this->section, $args),
-            'textarea' => new Textarea($this->section, $args),
-            'select' => new Select($this->section, $args),
-            'select-multiple' => new SelectMultiple($this->section, $args)
+            'text' => Text::class,
+            'checkbox' => Checkbox::class,
+            'choices' => Choices::class,
+            'textarea' => Textarea::class,
+            'wp-editor' => WPEditor::class,
+            'code-editor' => CodeEditor::class,
+            'select' => Select::class,
+            'select-multiple' => SelectMultiple::class
         ]);
 
-        $this->implementation = $type_map[$this->type];
+        $this->implementation = new $type_map[$this->type]($section, $args);
+    }
+
+    public function get_arg($key, $fallback = null)
+    {
+        return $this->args[$key] ?? $fallback;
     }
 
     public function sanitize($value)
     {
+        if (\is_callable($this->get_arg('sanitize'))) {
+            return $this->get_arg('sanitize')($value);
+        }
+
         return $this->implementation->sanitize($value);
     }
 

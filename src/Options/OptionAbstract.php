@@ -30,11 +30,7 @@ abstract class OptionAbstract
 
     public function sanitize($value)
     {
-        if (\is_callable($this->get_arg('sanitize'))) {
-            return $this->get_arg('sanitize')($value);
-        }
-
-        return $value;
+        return sanitize_text_field($value);
     }
 
     public function validate($value)
