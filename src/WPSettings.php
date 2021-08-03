@@ -18,7 +18,6 @@ class WPSettings
     public $tabs = [];
     public $errors;
     public $flash;
-    public $code_editor_script_loaded = false;
 
     public function __construct($title, $slug = null)
     {
@@ -286,15 +285,5 @@ class WPSettings
         }
 
         return $current_options;
-    }
-
-    public function is_code_editor_script_loaded() {
-        return $this->code_editor_script_loaded;
-    }
-
-    public function set_code_editor_script_loaded($loaded) {
-        $this->code_editor_script_loaded = $loaded;
-
-        return $this;
     }
 }
