@@ -93,8 +93,7 @@ $section->add_option('text', [
 ```php
 $section->add_option('textarea', [
     'name' => 'option_1',
-    'label' => __('Option 1', 'textdomain'),
-    'placeholder' => __('Fill in something', 'textdomain')
+    'label' => __('Option 1', 'textdomain')
 ]);
 ```
 
