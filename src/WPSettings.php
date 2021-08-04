@@ -23,6 +23,7 @@ class WPSettings
     {
         $this->title = $title;
         $this->option_name = strtolower(str_replace('-', '_', sanitize_title($this->title)));
+        $this->slug = $slug;
 
         if ($this->slug === null) {
             $this->slug = sanitize_title($title);
@@ -177,7 +178,7 @@ class WPSettings
     public function get_url()
     {
         if ($this->parent_slug) {
-            return \admin_url($this->parent_slug . "?page=$this->slug");
+            return \add_query_arg('page', $this->slug, \admin_url($this->parent_slug));
         }
 
         return \admin_url("admin.php?page=$this->slug");
