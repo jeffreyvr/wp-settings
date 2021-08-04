@@ -8,7 +8,7 @@ use function Jeffreyvr\WPSettings\view as view;
 
 abstract class OptionAbstract
 {
-    public Section $section;
+    public $section;
     public $args = [];
     public $view;
 

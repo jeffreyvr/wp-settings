@@ -7,7 +7,7 @@ use Jeffreyvr\WPSettings\WPSettings;
 
 class Tab
 {
-    public WPSettings $settings;
+    public $settings;
     public $title;
     public $slug;
     public $sections = [];

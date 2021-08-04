@@ -8,7 +8,12 @@
             "email": "jeffrey@vanrossum.dev"
         }
     ],
-    "require": {},
+    "require": {
+        "php": "^7.2"
+    },
+    "require-dev": {
+        "phpcompatibility/php-compatibility": "*"
+    },
     "autoload": {
         "psr-4": {
             "Jeffreyvr\\WPSettings\\": "src"

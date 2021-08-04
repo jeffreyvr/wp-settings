@@ -14,7 +14,7 @@ use Jeffreyvr\WPSettings\Options\SelectMultiple;
 
 class Option
 {
-    public Section $section;
+    public $section;
     public $type;
     public $args = [];
     public $implementation;

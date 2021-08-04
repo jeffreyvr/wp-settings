@@ -7,7 +7,7 @@ use Jeffreyvr\WPSettings\Option;
 
 class Section
 {
-    public Tab $tab;
+    public $tab;
     public $as_link;
     public $title;
     public $slug;
