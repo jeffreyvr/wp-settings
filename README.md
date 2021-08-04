@@ -84,8 +84,7 @@ To add an option, you either call the `add_option` method from an instance of `S
 ```php
 $section->add_option('text', [
     'name' => 'option_1',
-    'label' => __('Option 1', 'textdomain'),
-    'placeholder' => __('Fill in something', 'textdomain')
+    'label' => __('Option 1', 'textdomain')
 ]);
 ```
 
