@@ -2,9 +2,9 @@
 
 # WP Settings
 
-*THIS PACKAGE IS WORK IN PROGRESS*
+This package aims to make it easier to create settings pages for WordPress plugins. Typically, you would use the [Settings API](https://developer.wordpress.org/plugins/settings/settings-api/) or write something custom. While the Settings API works, there is still quite a lot to set up. You still need to write the HTML for your options for example. And it gets quite complicated if you want to add tabs and tab-sections. See this [comparison](https://www.youtube.com/watch?v=WoBRuLgacDo).
 
-This package aims to make it easier to create settings pages for WordPress plugins. Typically, you would use the [Settings API](https://developer.wordpress.org/plugins/settings/settings-api/) or write something custom. While the Settings API works, there is still quite a lot to set up. You still need to write the HTML for your options for example. And it gets quite complicated if you want to add tabs and tab-sections. See this [comparison](#comparison-with-the-settings-api).
+**This package is still under initial development. Use with caution untill the release of a stable version.**
 
 ## Installation
 
@@ -17,7 +17,9 @@ composer require jeffreyvanrossum/wp-settings
 ### Basic example
 
 ```php
-$settings = new WPSettings(__('My Plugin Settings'), 'my-plugin-settings');
+use Jeffreyvr\WPSettings;
+
+$settings = new WPSettings(__('My Plugin Settings'));
 
 $tab = $settings->add_tab(__( 'General', 'textdomain'));
 
@@ -34,30 +36,50 @@ $settings->make();
 ### Creating the settings instance
 
 ```php
-$settings = new WPSettings(__('My Plugin Settings'), 'my-plugin-settings');
+$settings = new WPSettings(__('My Plugin Settings'));
 ```
 
-### Adding tabs and sections
+By default, the page slug is created by sanitizing the title. You may pass a specific slug as the second parameter of the constructor.
 
-It is very easy to create tabs. Tabs are only displayed when there is more then one.
+Other methods for this class:
 
 ```php
-$tab = $settings->add_tab(__( 'General', 'textdomain'));
+$settings->set_capability('manage_options');
+$settings->set_option_name('my_plugin_options');
+$settings->set_menu_icon('dashicons-admin-generic');
+$settings->set_menu_position(5);
+$settings->set_menu_parent_slug('options-general.php');
+```
 
-$section = $tab->add_section('Section 1');
+### Tabs
+
+Tabs are only displayed when there is more then one.
+
+```php
+$settings->add_tab(__( 'General', 'textdomain'));
+```
+
+### Sections
+
+You can call the `add_section` method from an instance of `Tab`. You can also call it from the `WPSettings` instance. It will then be added to the last created `Tab`.
+
+```php
+$tab->add_section('Section 1');
 ```
 
 If you want sections to be displayed as submenu-items, you can do:
 
 ```php
-$section = $tab->add_section('Section 1', ['as_link' => true]);
+$tab->add_section('Section 1', ['as_link' => true]);
 ```
 
-### Adding options
+Note that this only has an effect when you have more then one `as_link` section.
 
-You may add options to sections.
+### Options
 
-#### Regular text field
+To add an option, you either call the `add_option` method from an instance of `Section`. You may also call `add_option` from the `WPSettings` instance. The option will then be added to the last created section.
+
+#### Text
 
 ```php
 $section->add_option('text', [
@@ -67,7 +89,17 @@ $section->add_option('text', [
 ]);
 ```
 
-#### Select field
+#### Textarea
+
+```php
+$section->add_option('textarea', [
+    'name' => 'option_1',
+    'label' => __('Option 1', 'textdomain'),
+    'placeholder' => __('Fill in something', 'textdomain')
+]);
+```
+
+#### Select
 
 ```php
 $section->add_option('select', [
@@ -80,7 +112,7 @@ $section->add_option('select', [
 ]);
 ```
 
-Or for multiple:
+#### Select Multiple
 
 ```php
 $section->add_option('select-multiple', [
@@ -93,19 +125,31 @@ $section->add_option('select-multiple', [
 ] );
 ```
 
-### Optionals
+#### WP Editor
 
 ```php
-$settings->set_capability('manage_options');
-
-$settings->set_option_name('my_plugin_options');
-
-$settings->set_menu_icon('dashicons-admin-generic');
-
-$settings->set_menu_position(5);
-
-$settings->set_menu_parent_slug('options-general.php');
+$section->add_option('wp-editor', [
+    'name' => 'option_1',
+    'label' => __('Option 1', 'textdomain')
+] );
 ```
+
+#### Code Editor
+
+```php
+$section->add_option('code-editor', [
+    'name' => 'option_1',
+    'label' => __('Option 1', 'textdomain')
+] );
+```
+
+#### Color
+
+Will be implemented later.
+
+#### Media
+
+Will be implemented later.
 
 ### Validation
 
@@ -140,134 +184,45 @@ $section->add_option('text', [
 ]);
 ```
 
+### Adding a custom option type
+
+To add an custom option type, you can use the `wp_settings_option_type_map` filter.
+
+```php
+add_filter('wp_settings_option_type_map', function($options){
+    $options['custom'] = YourCustomOption::class;
+    return $options;
+});
+```
+
+You will need to create a class for your custom option type.
+
+```php
+use Jeffreyvr\WPSettings\Options\OptionAbstract;
+
+class YourCustomOption extends OptionAbstract
+{
+    public $view = 'custom-option';
+
+    public function render()
+    {
+        echo 'Your custom option HTML';
+    }
+}
+```
+
+Once registered, you can then use your option type like so:
+
+```php
+$settings->add_option('custom-option', [
+    'name' => 'your_option_name',
+    'label' => __('Your label')
+]);
+```
+
 ## Contributors
 * [Jeffrey van Rossum](https://github.com/jeffreyvr)
-* [All contributors](https://github.com/jeffreyvr/tailpress/graphs/contributors)
+* [All contributors](https://github.com/jeffreyvr/wp-settings/graphs/contributors)
 
 ## License
 MIT. Please see the [License File](/LICENSE) for more information.
-
-## Comparison with the Settings API
-
-The below example is an options page made with WordPress Settings API. This example is taken from the [WordPress documentation](https://developer.wordpress.org/plugins/settings/custom-settings-page/). I removed the comments to allow for a fair comparison.
-
-```php
-<?php
-function wporg_settings_init() {
-    register_setting( 'wporg', 'wporg_options' );
-
-    add_settings_section(
-        'wporg_section_developers',
-        __( 'The Matrix has you.', 'wporg' ), 'wporg_section_developers_callback',
-        'wporg'
-    );
-
-    add_settings_field(
-        'wporg_field_pill',
-        __( 'Pill', 'wporg' ),
-        'wporg_field_pill_cb',
-        'wporg',
-        'wporg_section_developers',
-        array(
-            'label_for'         => 'wporg_field_pill',
-            'class'             => 'wporg_row',
-            'wporg_custom_data' => 'custom',
-        )
-    );
-}
-
-add_action( 'admin_init', 'wporg_settings_init' );
-
-function wporg_section_developers_callback( $args ) {
-    ?>
-    <p id="<?php echo esc_attr( $args['id'] ); ?>"><?php esc_html_e( 'Follow the white rabbit.', 'wporg' ); ?></p>
-    <?php
-}
-
-function wporg_field_pill_cb( $args ) {
-    $options = get_option( 'wporg_options' );
-    ?>
-    <select
-            id="<?php echo esc_attr( $args['label_for'] ); ?>"
-            data-custom="<?php echo esc_attr( $args['wporg_custom_data'] ); ?>"
-            name="wporg_options[<?php echo esc_attr( $args['label_for'] ); ?>]">
-        <option value="red" <?php echo isset( $options[ $args['label_for'] ] ) ? ( selected( $options[ $args['label_for'] ], 'red', false ) ) : ( '' ); ?>>
-            <?php esc_html_e( 'red pill', 'wporg' ); ?>
-        </option>
-        <option value="blue" <?php echo isset( $options[ $args['label_for'] ] ) ? ( selected( $options[ $args['label_for'] ], 'blue', false ) ) : ( '' ); ?>>
-            <?php esc_html_e( 'blue pill', 'wporg' ); ?>
-        </option>
-    </select>
-    <p class="description">
-        <?php esc_html_e( 'You take the blue pill and the story ends. You wake in your bed and you believe whatever you want to believe.', 'wporg' ); ?>
-    </p>
-    <p class="description">
-        <?php esc_html_e( 'You take the red pill and you stay in Wonderland and I show you how deep the rabbit-hole goes.', 'wporg' ); ?>
-    </p>
-    <?php
-}
-
-function wporg_options_page() {
-    add_menu_page(
-        'WPOrg',
-        'WPOrg Options',
-        'manage_options',
-        'wporg',
-        'wporg_options_page_html'
-    );
-}
-
-add_action( 'admin_menu', 'wporg_options_page' );
-
-function wporg_options_page_html() {
-    if ( ! current_user_can( 'manage_options' ) ) {
-        return;
-    }
-
-    if ( isset( $_GET['settings-updated'] ) ) {
-        add_settings_error( 'wporg_messages', 'wporg_message', __( 'Settings Saved', 'wporg' ), 'updated' );
-    }
-
-    settings_errors( 'wporg_messages' );
-    ?>
-    <div class="wrap">
-        <h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
-        <form action="options.php" method="post">
-            <?php
-            settings_fields( 'wporg' );
-
-            do_settings_sections( 'wporg' );
-
-            submit_button( 'Save Settings' );
-            ?>
-        </form>
-    </div>
-    <?php
-}
-```
-
-Now with the next example, the exact options page will be replicated with this package.
-
-```php
-use Jeffreyvr\WPSettings\WPSettings;
-
-$settings = new WPSettings(__('WPOrg Second', 'textdomain'));
-
-$tab = $settings->add_tab(__('General', 'textdomain'));
-
-$section = $tab->add_section(__('The Matrix has you.', 'wporg'), ['description' => esc_html__('Follow the white rabbit.', 'wporg')]);
-
-$section->add_option('select', [
-        'name' => 'wporg_field_pill',
-        'label' => __('Pill', 'textdomain'),
-        'description' => 'You take the blue pill and the story ends. You wake in your bed and you believe whatever you want to believe.
-        <br>You take the red pill and you stay in Wonderland and I show you how deep the rabbit-hole goes.',
-        'options' => [
-            'blue' => esc_html__('red pill', 'wporg'),
-            'red' => esc_html__('blue pill', 'wporg')
-        ]
-    ]
-);
-
-$settings->make();
-```

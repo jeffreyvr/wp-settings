@@ -35,32 +35,6 @@ abstract class OptionAbstract
 
     public function validate($value)
     {
-        if (empty($this->get_arg('validate'))) {
-            return true;
-        }
-
-        if (is_array($this->get_arg('validate'))) {
-            foreach ($this->get_arg('validate') as $validate) {
-                if (! \is_callable($validate['callback'])) {
-                    continue;
-                }
-
-                $valid = $validate['callback']($value);
-
-                if (!$valid) {
-                    $this->section->tab->settings->errors->add($this->get_arg('name'), $validate['feedback']);
-
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-        if (\is_callable($this->get_arg('validate'))) {
-            return $this->get_arg('validate')($value);
-        }
-
         return true;
     }
 
