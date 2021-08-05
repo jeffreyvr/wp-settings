@@ -82,6 +82,10 @@ class Option
 
     public function render()
     {
+        if (\is_callable($this->get_arg('visible')) && $this->get_arg('visible')() === false) {
+            return;
+        }
+
         if (\is_callable($this->get_arg('render'))) {
             echo $this->get_arg('render')($this->implementation);
 
