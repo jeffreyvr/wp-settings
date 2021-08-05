@@ -17,7 +17,7 @@ composer require jeffreyvanrossum/wp-settings dev-master
 ### Basic example
 
 ```php
-use Jeffreyvr\WPSettings;
+use Jeffreyvr\WPSettings\WPSettings;
 
 $settings = new WPSettings(__('My Plugin Settings'));
 
