@@ -4,8 +4,6 @@
 
 This package aims to make it easier to create settings pages for WordPress plugins. Typically, you would use the [Settings API](https://developer.wordpress.org/plugins/settings/settings-api/) or write something custom. While the Settings API works, there is still quite a lot to set up. You still need to write the HTML for your options for example. And it gets quite complicated if you want to add tabs and tab-sections. See this [comparison](https://www.youtube.com/watch?v=WoBRuLgacDo).
 
-**This package is still under initial development. Use with caution untill the release of a stable version.**
-
 ## Installation
 
 ```bash
