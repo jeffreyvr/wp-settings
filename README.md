@@ -9,7 +9,7 @@ This package aims to make it easier to create settings pages for WordPress plugi
 ## Installation
 
 ```bash
-composer require jeffreyvanrossum/wp-settings dev-master
+composer require jeffreyvanrossum/wp-settings
 ```
 
 ## Usage
