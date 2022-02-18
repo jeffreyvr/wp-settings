@@ -94,6 +94,14 @@ $section->add_option('textarea', [
     'label' => __('Option 1', 'textdomain')
 ]);
 ```
+#### Checkbox
+
+```php
+$section->add_option('checkbox', [
+    'name' => 'option_1',
+    'label' => __('Option 1', 'textdomain')
+]);
+```
 
 #### Select
 
