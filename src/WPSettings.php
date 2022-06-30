@@ -9,6 +9,7 @@ use Jeffreyvr\WPSettings\Flash;
 class WPSettings
 {
     public $title;
+    public $menu_title;
     public $slug;
     public $parent_slug;
     public $capability = 'manage_options';
@@ -35,6 +36,18 @@ class WPSettings
         $this->parent_slug = $slug;
 
         return $this;
+    }
+
+    public function set_menu_title($title)
+    {
+        $this->menu_title = $title;
+
+        return $this;
+    }
+
+    public function get_menu_title()
+    {
+        return $this->menu_title ?? $this->title;
     }
 
     public function set_capability($capability)
@@ -68,9 +81,9 @@ class WPSettings
     public function add_to_menu()
     {
         if ($this->parent_slug) {
-            \add_submenu_page($this->parent_slug, $this->title, $this->title, $this->capability, $this->slug, [$this, 'render'], $this->menu_position);
+            \add_submenu_page($this->parent_slug, $this->title, $this->get_menu_title(), $this->capability, $this->slug, [$this, 'render'], $this->menu_position);
         } else {
-            \add_menu_page($this->title, $this->title, $this->capability, $this->slug, [$this, 'render'], $this->menu_icon, $this->menu_position);
+            \add_menu_page($this->title, $this->get_menu_title(), $this->capability, $this->slug, [$this, 'render'], $this->menu_icon, $this->menu_position);
         }
     }
 

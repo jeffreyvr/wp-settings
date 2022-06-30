@@ -65,6 +65,6 @@ abstract class OptionAbstract
 
     public function get_value_attribute()
     {
-        return get_option($this->section->tab->settings->option_name)[$this->get_arg('name')] ? get_option($this->section->tab->settings->option_name)[$this->get_arg('name')] : $this->args['default'];
+        return get_option($this->section->tab->settings->option_name)[$this->get_arg('name')] ? get_option($this->section->tab->settings->option_name)[$this->get_arg('name')] : ($this->args['default'] ?? null);
     }
 }
