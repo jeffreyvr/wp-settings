@@ -265,27 +265,33 @@ class WPSettings
         }
 
         $current_options = $this->get_options();
-        $new_options = apply_filters('wp_settings_new_options', $_POST[$this->option_name] ?? [], $current_options);
+        $submitted_options = apply_filters('wp_settings_new_options', $_POST[$this->option_name] ?? [], $current_options);
+        $new_options = $current_options;
 
-        foreach ($new_options as $option => $value) {
-            $_option = $this->find_option($option);
+        foreach($this->get_active_tab()->get_active_sections() as $section) {
+            foreach($section->options as $option) {
+                $value = $submitted_options[$option->implementation->get_name()] ?? null;
 
-            $valid = $_option->validate($value);
+                $valid = $option->implementation->validate($value);
 
-            if (!$valid) {
-                continue;
+                if (!$valid) {
+                    continue;
+                }
+
+                $value = apply_filters("wp_settings_new_options_".$option->implementation->get_name(), $option->implementation->sanitize($value), $option->implementation);
+
+                $new_options[$option->implementation->get_name()] = $value;
             }
-
-            $current_options[$option] = apply_filters("wp_settings_new_options_$option", $_option->sanitize($value), $_option);
         }
 
-        $current_options = $this->maybe_unset_options($current_options, $new_options);
-
-        update_option($this->option_name, $current_options);
+        update_option($this->option_name, $new_options);
 
         $this->flash->set('success', __('Saved changes!'));
     }
 
+    /**
+     * @deprecated
+     */
     public function maybe_unset_options($current_options, $new_options)
     {
         if (! isset($_REQUEST['wp_settings_submitted'])) {
