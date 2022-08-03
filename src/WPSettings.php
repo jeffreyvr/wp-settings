@@ -252,7 +252,7 @@ class WPSettings
 
     public function save()
     {
-        if (! isset($_POST['wp_settings_trigger'])) {
+        if (! isset($_POST['wp_settings_save']) || ! wp_verify_nonce($_POST['wp_settings_save'], 'wp_settings_save_' . $this->option_name)) {
             return;
         }
 
@@ -260,16 +260,12 @@ class WPSettings
             wp_die(__('What do you think you are doing?'));
         }
 
-        if (! isset($_POST[$this->option_name]) && !isset($_POST['wp_settings_submitted'])) {
-            return;
-        }
-
         $current_options = $this->get_options();
         $submitted_options = apply_filters('wp_settings_new_options', $_POST[$this->option_name] ?? [], $current_options);
         $new_options = $current_options;
 
-        foreach($this->get_active_tab()->get_active_sections() as $section) {
-            foreach($section->options as $option) {
+        foreach ($this->get_active_tab()->get_active_sections() as $section) {
+            foreach ($section->options as $option) {
                 $value = $submitted_options[$option->implementation->get_name()] ?? null;
 
                 $valid = $option->implementation->validate($value);

@@ -5,7 +5,7 @@
         <?php Jeffreyvr\WPSettings\view('section', compact('section')); ?>
     <?php } ?>
 
-    <input type="hidden" name="wp_settings_trigger" value="1">
+    <?php wp_nonce_field( 'wp_settings_save_' . $settings->option_name, 'wp_settings_save' ); ?>
 
     <?php submit_button(); ?>
 </form>
