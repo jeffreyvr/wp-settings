@@ -10,6 +10,7 @@ All notable changes to `wp-settings` will be documented in this file
 - Add `visible` callback option in [commit](https://github.com/jeffreyvr/wp-settings/commit/252b3038d837e4abe17a94a20c66b6f7294b0078)
 - Refactor saving options: now from active tabs
 - Use wp nonce instead of regular input on save
+- Write url only if parent slug contains `.php`
 
 ## 1.0.0 - 2021-08-13
 
