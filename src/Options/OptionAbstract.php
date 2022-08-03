@@ -40,6 +40,10 @@ abstract class OptionAbstract
 
     public function get_arg($key, $fallback = null)
     {
+        if(\is_callable($this->args[$key])) {
+            return $this->args[$key]() ?? $fallback;
+        }
+
         return $this->args[$key] ?? $fallback;
     }
 

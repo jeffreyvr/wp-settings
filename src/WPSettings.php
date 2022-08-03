@@ -92,9 +92,9 @@ class WPSettings
         $this->errors = new Error($this);
         $this->flash = new Flash($this);
 
-        add_action('admin_init', [$this, 'save']);
-        add_action('admin_menu', [$this, 'add_to_menu']);
-        add_action('admin_head', [$this, 'styling']);
+        add_action('admin_init', [$this, 'save'], 20);
+        add_action('admin_menu', [$this, 'add_to_menu'], 20);
+        add_action('admin_head', [$this, 'styling'], 20);
     }
 
     public function is_on_settings_page()
