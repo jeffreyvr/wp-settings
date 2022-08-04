@@ -228,7 +228,11 @@ class WPSettings
 
     public function render()
     {
+        do_action('wp_settings_before_render_settings_page');
+
         view('settings-page', ['settings' => $this]);
+
+        do_action('wp_settings_after_render_settings_page');
     }
 
     public function get_options()

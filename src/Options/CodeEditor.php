@@ -11,7 +11,7 @@ class CodeEditor extends OptionAbstract
 
     public function __construct($section, $args = [])
     {
-        add_action('admin_enqueue_scripts', [$this, 'enqueue']);
+        add_action('wp_settings_before_render_settings_page', [$this, 'enqueue']);
 
         parent::__construct($section, $args);
     }
