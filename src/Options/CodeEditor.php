@@ -25,7 +25,11 @@ class CodeEditor extends OptionAbstract
 
         wp_localize_script('jquery', $settings_name, wp_enqueue_code_editor(['type' => $this->get_arg('editor_type', 'text/html')]));
 
-        wp_add_inline_script('wp-theme-plugin-editor', 'jQuery(function($){ wp.codeEditor.initialize($("#'.$this->get_id_attribute().'"), '.$settings_name.'); });');
+        wp_add_inline_script('wp-theme-plugin-editor', 'jQuery(function($){
+            if($("#'.$this->get_id_attribute().'").length > 0) {
+                wp.codeEditor.initialize($("#'.$this->get_id_attribute().'"), '.$settings_name.');
+            }
+        });');
     }
 
     public function sanitize($value)
