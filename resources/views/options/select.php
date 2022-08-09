@@ -4,7 +4,7 @@
     </th>
     <td class="forminp forminp-text">
         <select id="<?php echo $option->get_id_attribute(); ?>" name="<?php echo esc_attr($option->get_name_attribute()); ?>">
-            <?php foreach ($option->args('options', []) as $key => $label) { ?>
+            <?php foreach ($option->get_arg('options', []) as $key => $label) { ?>
                 <option value="<?php echo $key; ?>" <?php selected($option->get_value_attribute(), $key); ?>><?php echo $label; ?></option>
             <?php } ?>
         </select>
