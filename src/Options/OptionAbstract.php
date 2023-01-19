@@ -71,16 +71,17 @@ abstract class OptionAbstract
         return $this->get_arg('css', []);
     }
 
+
     public function get_input_class_attribute()
     {
-        $class = $this->get_css()['input_class'];
+        $class = $this->get_css()['input_class'] ?? null;
 
         return ! empty($class) ? esc_attr($class) : null;
     }
 
     public function get_label_class_attribute()
     {
-        $class = $this->get_css()['label_class'];
+        $class = $this->get_css()['label_class'] ?? null;
 
         return ! empty($class) ? esc_attr($class) : null;
     }
