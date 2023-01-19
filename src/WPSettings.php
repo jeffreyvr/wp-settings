@@ -2,22 +2,28 @@
 
 namespace Jeffreyvr\WPSettings;
 
-use Jeffreyvr\WPSettings\Tab;
-use Jeffreyvr\WPSettings\Error;
-use Jeffreyvr\WPSettings\Flash;
-
 class WPSettings
 {
     public $title;
+
     public $menu_title;
+
     public $slug;
+
     public $parent_slug;
+
     public $capability = 'manage_options';
+
     public $menu_icon;
+
     public $menu_position;
+
     public $option_name;
+
     public $tabs = [];
+
     public $errors;
+
     public $flash;
 
     public function __construct($title, $slug = null)
@@ -101,7 +107,7 @@ class WPSettings
     {
         $screen = get_current_screen();
 
-        if ($screen->base === 'settings_page_' . $this->slug) {
+        if ($screen->base === 'settings_page_'.$this->slug) {
             return true;
         }
 
@@ -130,6 +136,7 @@ class WPSettings
                 return $tab;
             }
         }
+
         return false;
     }
 
@@ -251,12 +258,13 @@ class WPSettings
                 }
             }
         }
+
         return false;
     }
 
     public function save()
     {
-        if (! isset($_POST['wp_settings_save']) || ! wp_verify_nonce($_POST['wp_settings_save'], 'wp_settings_save_' . $this->option_name)) {
+        if (! isset($_POST['wp_settings_save']) || ! wp_verify_nonce($_POST['wp_settings_save'], 'wp_settings_save_'.$this->option_name)) {
             return;
         }
 
@@ -274,11 +282,11 @@ class WPSettings
 
                 $valid = $option->implementation->validate($value);
 
-                if (!$valid) {
+                if (! $valid) {
                     continue;
                 }
 
-                $value = apply_filters("wp_settings_new_options_".$option->implementation->get_name(), $option->implementation->sanitize($value), $option->implementation);
+                $value = apply_filters('wp_settings_new_options_'.$option->implementation->get_name(), $option->implementation->sanitize($value), $option->implementation);
 
                 $new_options[$option->implementation->get_name()] = $value;
             }

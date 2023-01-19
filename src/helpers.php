@@ -2,8 +2,6 @@
 
 namespace Jeffreyvr\WPSettings;
 
-use Jeffreyvr\WPSettings\WPSettings;
-
 if (! function_exists('view')) {
     function view($file, $variables = [])
     {
@@ -11,7 +9,7 @@ if (! function_exists('view')) {
             ${$name} = $value;
         }
 
-        $full_path = __DIR__ . "/../resources/views/{$file}.php";
+        $full_path = __DIR__."/../resources/views/{$file}.php";
 
         if (! file_exists($full_path)) {
             return;

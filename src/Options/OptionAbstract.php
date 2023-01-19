@@ -2,14 +2,14 @@
 
 namespace Jeffreyvr\WPSettings\Options;
 
-use Jeffreyvr\WPSettings\Section;
-use Jeffreyvr\WPSettings\WPSettings;
 use function Jeffreyvr\WPSettings\view as view;
 
 abstract class OptionAbstract
 {
     public $section;
+
     public $args = [];
+
     public $view;
 
     public function __construct($section, $args = [])
@@ -20,7 +20,7 @@ abstract class OptionAbstract
 
     public function render()
     {
-        return view('options/' . $this->view, ['option' => $this]);
+        return view('options/'.$this->view, ['option' => $this]);
     }
 
     public function has_error()
@@ -75,19 +75,19 @@ abstract class OptionAbstract
     {
         $class = $this->get_css()['input_class'];
 
-        return !empty($class) ? esc_attr($class) : null;
+        return ! empty($class) ? esc_attr($class) : null;
     }
 
     public function get_label_class_attribute()
     {
         $class = $this->get_css()['label_class'];
 
-        return !empty($class) ? esc_attr($class) : null;
+        return ! empty($class) ? esc_attr($class) : null;
     }
 
     public function get_name_attribute()
     {
-        return $this->section->tab->settings->option_name . '[' . $this->get_arg('name') . ']';
+        return $this->section->tab->settings->option_name.'['.$this->get_arg('name').']';
     }
 
     public function get_value_attribute()

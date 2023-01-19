@@ -9,10 +9,11 @@
         }
     ],
     "require": {
-        "php": "^7.2|^8.0"
+        "php": "^7.4|^8.0"
     },
     "require-dev": {
-        "phpcompatibility/php-compatibility": "*"
+        "phpcompatibility/php-compatibility": "*",
+        "laravel/pint": "^1.4"
     },
     "autoload": {
         "psr-4": {
@@ -21,5 +22,8 @@
         "files": [
             "src/helpers.php"
         ]
+    },
+    "scripts": {
+        "format": "./vendor/bin/pint ./src/"
     }
 }

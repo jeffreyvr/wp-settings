@@ -2,21 +2,23 @@
 
 namespace Jeffreyvr\WPSettings;
 
-use Jeffreyvr\WPSettings\Section;
-use Jeffreyvr\WPSettings\Options\Text;
-use Jeffreyvr\WPSettings\Options\Select;
-use Jeffreyvr\WPSettings\Options\Choices;
 use Jeffreyvr\WPSettings\Options\Checkbox;
+use Jeffreyvr\WPSettings\Options\Choices;
+use Jeffreyvr\WPSettings\Options\CodeEditor;
+use Jeffreyvr\WPSettings\Options\Select;
+use Jeffreyvr\WPSettings\Options\SelectMultiple;
+use Jeffreyvr\WPSettings\Options\Text;
 use Jeffreyvr\WPSettings\Options\Textarea;
 use Jeffreyvr\WPSettings\Options\WPEditor;
-use Jeffreyvr\WPSettings\Options\CodeEditor;
-use Jeffreyvr\WPSettings\Options\SelectMultiple;
 
 class Option
 {
     public $section;
+
     public $type;
+
     public $args = [];
+
     public $implementation;
 
     public function __construct($section, $type, $args = [])
@@ -33,7 +35,7 @@ class Option
             'wp-editor' => WPEditor::class,
             'code-editor' => CodeEditor::class,
             'select' => Select::class,
-            'select-multiple' => SelectMultiple::class
+            'select-multiple' => SelectMultiple::class,
         ]);
 
         $this->implementation = new $type_map[$this->type]($section, $args);
@@ -63,7 +65,7 @@ class Option
 
                 $valid = $validate['callback']($value);
 
-                if (!$valid) {
+                if (! $valid) {
                     $this->section->tab->settings->errors->add($this->get_arg('name'), $validate['feedback']);
 
                     return false;

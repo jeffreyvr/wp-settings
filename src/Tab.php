@@ -2,14 +2,14 @@
 
 namespace Jeffreyvr\WPSettings;
 
-use Jeffreyvr\WPSettings\Section;
-use Jeffreyvr\WPSettings\WPSettings;
-
 class Tab
 {
     public $settings;
+
     public $title;
+
     public $slug;
+
     public $sections = [];
 
     public function __construct($settings, $title, $slug = null)
@@ -50,6 +50,7 @@ class Tab
                 return $section;
             }
         }
+
         return false;
     }
 
@@ -67,12 +68,11 @@ class Tab
             return $this->sections[0];
         }
 
-        return;
     }
 
     public function get_active_sections()
     {
-        if (!isset($_REQUEST['section']) && $this->contains_only_section_links()) {
+        if (! isset($_REQUEST['section']) && $this->contains_only_section_links()) {
             return [$this->sections[0]];
         }
 

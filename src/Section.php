@@ -2,16 +2,19 @@
 
 namespace Jeffreyvr\WPSettings;
 
-use Jeffreyvr\WPSettings\Tab;
-use Jeffreyvr\WPSettings\Option;
 
 class Section
 {
     public $tab;
+
     public $as_link;
+
     public $title;
+
     public $slug;
+
     public $description;
+
     public $options = [];
 
     public function __construct($tab, $title, $args = [])

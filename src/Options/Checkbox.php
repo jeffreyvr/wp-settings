@@ -2,8 +2,6 @@
 
 namespace Jeffreyvr\WPSettings\Options;
 
-use Jeffreyvr\WPSettings\Options\OptionAbstract;
-
 class Checkbox extends OptionAbstract
 {
     public $view = 'checkbox';
