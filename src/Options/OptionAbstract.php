@@ -40,11 +40,11 @@ abstract class OptionAbstract
 
     public function get_arg($key, $fallback = null)
     {
-        if(empty($this->args[$key])) {
+        if (empty($this->args[$key])) {
             return $fallback;
         }
 
-        if(\is_callable($this->args[$key])) {
+        if (\is_callable($this->args[$key])) {
             return $this->args[$key]();
         }
 
@@ -64,6 +64,25 @@ abstract class OptionAbstract
     public function get_name()
     {
         return $this->get_arg('name');
+    }
+
+    public function get_css()
+    {
+        return $this->get_arg('css', []);
+    }
+
+    public function get_input_class_attribute()
+    {
+        $class = $this->get_css()['input_class'];
+
+        return !empty($class) ? esc_attr($class) : null;
+    }
+
+    public function get_label_class_attribute()
+    {
+        $class = $this->get_css()['label_class'];
+
+        return !empty($class) ? esc_attr($class) : null;
     }
 
     public function get_name_attribute()

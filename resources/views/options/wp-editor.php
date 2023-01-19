@@ -1,6 +1,6 @@
 <tr valign="top">
     <th scope="row" class="titledesc">
-        <label for="<?php echo $option->get_id_attribute(); ?>"><?php echo $option->get_label(); ?></label>
+        <label for="<?php echo $option->get_id_attribute(); ?>" class="<?php echo $option->get_label_class_attribute(); ?>"><?php echo $option->get_label(); ?></label>
     </th>
     <td class="forminp forminp-text">
         <?php \wp_editor($option->get_value_attribute(), $option->get_id_attribute(), [
