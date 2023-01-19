@@ -149,7 +149,12 @@ $section->add_option('code-editor', [
 
 #### Color
 
-Will be implemented later.
+```php
+$section->add_option('color', [
+    'name' => 'option_1',
+    'label' => __('Option 1', 'textdomain')
+] );
+```
 
 #### Media
 

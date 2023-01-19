@@ -13,7 +13,8 @@
     },
     "require-dev": {
         "phpcompatibility/php-compatibility": "*",
-        "laravel/pint": "^1.4"
+        "laravel/pint": "^1.4",
+        "spatie/ray": "^1.36"
     },
     "autoload": {
         "psr-4": {

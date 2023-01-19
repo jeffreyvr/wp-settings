@@ -235,7 +235,11 @@ class WPSettings
 
     public function render()
     {
+        Enqueuer::setEnqueueManager(new EnqueueManager);
+
         do_action('wp_settings_before_render_settings_page');
+
+        Enqueuer::enqueue();
 
         view('settings-page', ['settings' => $this]);
 

@@ -5,6 +5,7 @@ namespace Jeffreyvr\WPSettings;
 use Jeffreyvr\WPSettings\Options\Checkbox;
 use Jeffreyvr\WPSettings\Options\Choices;
 use Jeffreyvr\WPSettings\Options\CodeEditor;
+use Jeffreyvr\WPSettings\Options\Color;
 use Jeffreyvr\WPSettings\Options\Select;
 use Jeffreyvr\WPSettings\Options\SelectMultiple;
 use Jeffreyvr\WPSettings\Options\Text;
@@ -36,6 +37,7 @@ class Option
             'code-editor' => CodeEditor::class,
             'select' => Select::class,
             'select-multiple' => SelectMultiple::class,
+            'color' => Color::class,
         ]);
 
         $this->implementation = new $type_map[$this->type]($section, $args);
