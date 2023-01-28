@@ -197,7 +197,7 @@ class WPSettings
 
     public function get_url()
     {
-        if (strpos($this->parent_slug, '.php') !== false && $this->parent_slug) {
+        if ($this->parent_slug && strpos($this->parent_slug, '.php') !== false) {
             return \add_query_arg('page', $this->slug, \admin_url($this->parent_slug));
         }
 
