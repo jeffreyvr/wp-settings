@@ -284,7 +284,7 @@ class WPSettings
             foreach ($section->options as $option) {
                 $value = $submitted_options[$option->implementation->get_name()] ?? null;
 
-                $valid = $option->implementation->validate($value);
+                $valid = $option->validate($value);
 
                 if (! $valid) {
                     continue;

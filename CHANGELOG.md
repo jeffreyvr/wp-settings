@@ -4,6 +4,8 @@ All notable changes to `wp-settings` will be documented in this file
 
 ## Unreleased
 
+- Fix custom validation bug (#11)
+
 ## 1.1.0 - 2023-01-19
 
 - Add priority to action hooks in `make` method
