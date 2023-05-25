@@ -4,7 +4,13 @@ All notable changes to `wp-settings` will be documented in this file
 
 ## Unreleased
 
+## 1.1.3 - 2023-05-25
+
 - Fix custom validation bug (#11)
+
+## 1.1.2 - 2023-01-28
+
+- Fixing notice
 
 ## 1.1.0 - 2023-01-19
 
