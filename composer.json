@@ -9,7 +9,8 @@
         }
     ],
     "require": {
-        "php": "^7.4|^8.0"
+        "php": "^7.4|^8.0",
+        "adbario/php-dot-notation": "^3.3"
     },
     "require-dev": {
         "phpcompatibility/php-compatibility": "*",

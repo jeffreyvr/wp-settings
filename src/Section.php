@@ -2,9 +2,13 @@
 
 namespace Jeffreyvr\WPSettings;
 
+use Jeffreyvr\WPSettings\Traits\HasOptionLevel;
+
 
 class Section
 {
+    use HasOptionLevel;
+
     public $tab;
 
     public $as_link;
@@ -16,6 +20,8 @@ class Section
     public $description;
 
     public $options = [];
+
+    public $args = [];
 
     public function __construct($tab, $title, $args = [])
     {

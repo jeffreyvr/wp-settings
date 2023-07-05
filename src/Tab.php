@@ -2,8 +2,12 @@
 
 namespace Jeffreyvr\WPSettings;
 
+use Jeffreyvr\WPSettings\Traits\HasOptionLevel;
+
 class Tab
 {
+    use HasOptionLevel;
+
     public $settings;
 
     public $title;

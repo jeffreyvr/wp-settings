@@ -2,6 +2,8 @@
 
 namespace Jeffreyvr\WPSettings;
 
+use Adbar\Dot;
+
 class WPSettings
 {
     public $title;
@@ -278,11 +280,12 @@ class WPSettings
 
         $current_options = $this->get_options();
         $submitted_options = apply_filters('wp_settings_new_options', $_POST[$this->option_name] ?? [], $current_options);
-        $new_options = $current_options;
+        $new_options = new Dot($current_options);
 
         foreach ($this->get_active_tab()->get_active_sections() as $section) {
             foreach ($section->options as $option) {
-                $value = $submitted_options[$option->implementation->get_name()] ?? null;
+                $value = (new Dot($submitted_options))
+                    ->get($option->implementation->get_option_key_path());
 
                 $valid = $option->validate($value);
 
@@ -292,11 +295,11 @@ class WPSettings
 
                 $value = apply_filters('wp_settings_new_options_'.$option->implementation->get_name(), $option->implementation->sanitize($value), $option->implementation);
 
-                $new_options[$option->implementation->get_name()] = $value;
+                $new_options->set($option->implementation->get_option_key_path(), $value);
             }
         }
 
-        update_option($this->option_name, $new_options);
+        update_option($this->option_name, $new_options->pull());
 
         $this->flash->set('success', __('Saved changes!'));
     }

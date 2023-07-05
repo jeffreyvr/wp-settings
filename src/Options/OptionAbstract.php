@@ -2,6 +2,7 @@
 
 namespace Jeffreyvr\WPSettings\Options;
 
+use Adbar\Dot;
 use function Jeffreyvr\WPSettings\view as view;
 
 abstract class OptionAbstract
@@ -71,7 +72,6 @@ abstract class OptionAbstract
         return $this->get_arg('css', []);
     }
 
-
     public function get_input_class_attribute()
     {
         $class = $this->get_css()['input_class'] ?? null;
@@ -88,13 +88,45 @@ abstract class OptionAbstract
 
     public function get_name_attribute()
     {
-        return $this->section->tab->settings->option_name.'['.$this->get_arg('name').']';
+        $keys = explode('.', $this->get_option_key_path());
+
+        $wrapped = array_map(function ($key) {
+            return '[' . $key . ']';
+        }, $keys);
+
+        $inputName = implode('', $wrapped);
+
+        return $this->section->tab->settings->option_name . $inputName;
+    }
+
+    public function get_option_key_path()
+    {
+        $keys = [];
+
+        if ($this->section->tab->is_option_level()) {
+            $keys[] = str_replace('-', '_', $this->section->tab->slug);
+        }
+
+        if ($this->section->is_option_level()) {
+            $keys[] = str_replace('-', '_', $this->section->slug);
+        }
+
+        $keys[] = $this->get_arg('name');
+
+        return implode('.', $keys);
+    }
+
+    public function get_default_value()
+    {
+        $this->args['default'] ?? null;
     }
 
     public function get_value_attribute()
     {
-        $value = get_option($this->section->tab->settings->option_name)[$this->get_arg('name')] ?? false;
+        $options = get_option($this->section->tab->settings->option_name);
 
-        return $value ? $value : $this->args['default'] ?? null;
+        $dot = new Dot($options);
+
+        return $dot->get($this->get_option_key_path(), $this->get_default_value());
     }
 }

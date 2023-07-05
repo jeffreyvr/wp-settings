@@ -5,9 +5,7 @@ namespace Jeffreyvr\WPSettings;
 if (! function_exists('view')) {
     function view($file, $variables = [])
     {
-        foreach ($variables as $name => $value) {
-            ${$name} = $value;
-        }
+        extract($variables, EXTR_SKIP);
 
         $full_path = __DIR__."/../resources/views/{$file}.php";
 
