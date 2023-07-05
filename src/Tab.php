@@ -71,7 +71,6 @@ class Tab
         if ($this->contains_only_section_links()) {
             return $this->sections[0];
         }
-
     }
 
     public function get_active_sections()

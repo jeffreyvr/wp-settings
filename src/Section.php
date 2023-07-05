@@ -4,7 +4,6 @@ namespace Jeffreyvr\WPSettings;
 
 use Jeffreyvr\WPSettings\Traits\HasOptionLevel;
 
-
 class Section
 {
     use HasOptionLevel;

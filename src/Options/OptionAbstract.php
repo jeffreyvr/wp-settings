@@ -91,12 +91,12 @@ abstract class OptionAbstract
         $keys = explode('.', $this->get_option_key_path());
 
         $wrapped = array_map(function ($key) {
-            return '[' . $key . ']';
+            return '['.$key.']';
         }, $keys);
 
         $inputName = implode('', $wrapped);
 
-        return $this->section->tab->settings->option_name . $inputName;
+        return $this->section->tab->settings->option_name.$inputName;
     }
 
     public function get_option_key_path()
