@@ -158,7 +158,31 @@ $section->add_option('color', [
 
 #### Media
 
-Will be implemented later.
+_Available in next release._
+
+```php
+$section->add_option('media', [
+    'name' => 'option_1',
+    'label' => __('Option 1', 'textdomain')
+] );
+```
+
+For an image specific, you can use:
+
+```php
+$section->add_option('image', [
+    'name' => 'option_1',
+    'label' => __('Option 1', 'textdomain')
+] );
+```
+
+For video specific, you can use:
+```php
+$section->add_option('video', [
+    'name' => 'option_1',
+    'label' => __('Option 1', 'textdomain')
+] );
+```
 
 ### Validation
 

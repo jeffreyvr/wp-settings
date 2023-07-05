@@ -6,10 +6,13 @@ use Jeffreyvr\WPSettings\Options\Checkbox;
 use Jeffreyvr\WPSettings\Options\Choices;
 use Jeffreyvr\WPSettings\Options\CodeEditor;
 use Jeffreyvr\WPSettings\Options\Color;
+use Jeffreyvr\WPSettings\Options\Image;
+use Jeffreyvr\WPSettings\Options\Media;
 use Jeffreyvr\WPSettings\Options\Select;
 use Jeffreyvr\WPSettings\Options\SelectMultiple;
 use Jeffreyvr\WPSettings\Options\Text;
 use Jeffreyvr\WPSettings\Options\Textarea;
+use Jeffreyvr\WPSettings\Options\Video;
 use Jeffreyvr\WPSettings\Options\WPEditor;
 
 class Option
@@ -38,6 +41,9 @@ class Option
             'select' => Select::class,
             'select-multiple' => SelectMultiple::class,
             'color' => Color::class,
+            'media' => Media::class,
+            'image' => Image::class,
+            'video' => Video::class,
         ]);
 
         $this->implementation = new $type_map[$this->type]($section, $args);
