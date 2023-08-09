@@ -86,14 +86,19 @@ $section->add_option('text', [
 ]);
 ```
 
+In addition to `name` and `label`, you can also pass `type`. This makes it possible to set the input type to, for example, password or number.
+
 #### Textarea
 
 ```php
 $section->add_option('textarea', [
     'name' => 'option_1',
-    'label' => __('Option 1', 'textdomain')
+    'label' => __('Option 1', 'textdomain'),
 ]);
 ```
+
+You may also set the `cols` and `rows` attributes.
+
 #### Checkbox
 
 ```php
@@ -158,8 +163,6 @@ $section->add_option('color', [
 
 #### Media
 
-_Available in next release._
-
 ```php
 $section->add_option('media', [
     'name' => 'option_1',
@@ -215,6 +218,40 @@ $section->add_option('text', [
         return sanitize_key($value);
     }
 ]);
+```
+
+### Options array structure
+
+By default, the options are stored as a one level array:
+
+```
+[
+    'option_1' => 'value 1',
+    'option_2' => 'value 2',
+]
+```
+
+However, you can add tab and/or section levels in this structure.
+
+```php
+$tab = $settings->add_tab(__( 'General', 'textdomain'))
+    ->option_level();
+
+$section = $tab->add_section('Example', ['as_link' => true])
+    ->option_level();
+```
+
+Which would result in:
+
+```
+[
+    'general' => [
+        'example' => [
+            'option_1' => 'value 1',
+            'option_2' => 'value 2',
+        ]
+    ]
+]
 ```
 
 ### Adding a custom option type

@@ -6,6 +6,8 @@ All notable changes to `wp-settings` will be documented in this file
 
 - Add media option type (and image and video)
 - Add `option_level` on sections and tabs to allow for options being stored in multi-level array
+- Add `rows` and `cols` option for textarea
+- Add `type` option for text
 
 ## 1.1.3 - 2023-05-25
 
