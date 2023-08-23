@@ -4,6 +4,10 @@ All notable changes to `wp-settings` will be documented in this file
 
 ## Unreleased
 
+# 1.2.1 - 2023-08-23
+
+- Use `sanitize_textarea_field` for the `textarea` option (#14)
+
 # 1.2.0 - 2023-08-09
 
 - Add media option type (and image and video)
