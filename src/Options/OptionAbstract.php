@@ -118,7 +118,7 @@ abstract class OptionAbstract
 
     public function get_default_value()
     {
-        $this->args['default'] ?? null;
+        return $this->args['default'] ?? null;
     }
 
     public function get_value_attribute()
