@@ -6,7 +6,7 @@ class Error
 {
     public $settings;
 
-    public $error;
+    public $errors;
 
     public function __construct($settings)
     {
