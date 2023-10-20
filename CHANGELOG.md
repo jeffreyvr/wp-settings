@@ -7,6 +7,7 @@ All notable changes to `wp-settings` will be documented in this file
 # 1.2.2 - 2023-10-20
 
 - Typo fix in `Error` class (fixes dynamic property creation notice).
+- Fix not returning default value (By AkramiPro).
 
 # 1.2.1 - 2023-08-23
 
