@@ -1,8 +1,16 @@
-<p align="center"><img src="/art/snippet.png" alt="Code Snippet" style="width:60%;"></p>
+<p align="center"><a href="https://vanrossum.dev" target="_blank"><img src="https://raw.githubusercontent.com/jeffreyvr/vanrossum.dev-art/main/logo.svg" width="320" alt="vanrossum.dev Logo"></a></p>
+
+<p align="center">
+<a href="https://packagist.org/packages/jeffreyvanrossum/wp-settings"><img src="https://img.shields.io/packagist/dt/jeffreyvanrossum/wp-settings" alt="Total Downloads"></a>
+<a href="https://packagist.org/packages/jeffreyvanrossum/wp-settings"><img src="https://img.shields.io/packagist/v/jeffreyvanrossum/wp-settings" alt="Latest Stable Version"></a>
+<a href="https://packagist.org/packages/jeffreyvanrossum/wp-settings"><img src="https://img.shields.io/packagist/l/jeffreyvanrossum/wp-settings" alt="License"></a>
+</p>
 
 # WP Settings
 
 This package aims to make it easier to create settings pages for WordPress plugins. Typically, you would use the [Settings API](https://developer.wordpress.org/plugins/settings/settings-api/) or write something custom. While the Settings API works, there is still quite a lot to set up. You still need to write the HTML for your options for example. And it gets quite complicated if you want to add tabs and tab-sections. See this [comparison](https://www.youtube.com/watch?v=WoBRuLgacDo).
+
+<p align="center"><img src="/art/snippet.png" alt="Code Snippet" style="width:60%;"></p>
 
 ## Installation
 
